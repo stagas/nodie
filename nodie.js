@@ -20,7 +20,7 @@ process.title = 'nodie ' + process.argv.slice(2).join(' ')
   console.log('Starting', app.join(' '))
 
   try {
-    proc = child_process.spawn.call(this, app[0], app.slice(1))
+    proc = child_process.spawn.apply(this, app[0], app.slice(1))
   } catch(e) {
     console.log('Failed to run', app.join(' '), '\n', util.inspect(e))
     return setTimeout(function() {
