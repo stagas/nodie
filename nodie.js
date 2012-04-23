@@ -6,50 +6,36 @@
 // MIT licenced
 //
 
-var util = require('util')
-  , child_process = require('child_process')
-  , proc
+var spawn = require('child_process').spawn
 
 if (process.argv.length <= 2) {
-  console.log('usage: nodie <program> [param] [...]')
+  console.error('usage: nodie <program> [param, [...]]')
   process.exit()
 }
-process.title = 'nodie ' + process.argv.slice(2).join(' ')
+var app = process.argv.slice(2)
+var appString = app.join(' ')
+process.title = 'nodie ' + appString
 
-;(function respawn(app) {
-  console.log('Starting', app.join(' '))
-
+;(function run () {
+  console.error('starting', appString)
   try {
-    proc = child_process.spawn.call(this, app[0], app.slice(1))
-  } catch(e) {
-    console.log('Failed to run', app.join(' '), '\n', util.inspect(e))
-    return setTimeout(function() {
-      respawn(app)
-    }, 5000)
+    child = spawn(app[0], app.slice(1))   
   }
-
-  proc.stdout.on('data', function (data) {
-    process.stdout.write(data)
-  })
-
-  proc.stderr.on('data', function (data) {
-    util.print(data)
-  })
-
-  proc.on('exit', function (err, sig) {
+  catch (e) {
+    console.error('error starting:', e.stack)
+    console.error('restarts in 5 seconds...')
+    return setTimeout(run, 5000)
+  }
+  child.stdout.pipe(process.stdout)
+  child.stderr.pipe(process.stderr)
+  child.on('exit', function (err, sig) {
     if (err) {
-      console.log('Process exited with error:', err, sig)
-      console.log('Restarting in 5 seconds')
-      setTimeout(function() {
-        respawn(app)
-      }, 5000)
-    } else {
-      console.log('Process exited gracefully')
-      console.log('Restarting in 5 seconds')
-      setTimeout(function() {
-        respawn(app)
-      }, 5000)
+      console.error('not ok')
+      console.error('child process exited with error:', err)
+      console.error('exit signal:', sig)
     }
+    else console.error('child process exited')
+    console.error('restarts in 5 seconds...')
+    setTimeout(run, 5000)
   })
-
-}(process.argv.slice(2)))
+}());

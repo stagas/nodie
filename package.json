@@ -1,13 +1,12 @@
 { "name" : "nodie"
 , "description" : "nodie restarts an application if it dies"
-, "version" : "0.0.1"
+, "version" : "0.0.2"
 , "homepage" : "https://github.com/stagas/nodie"
 , "author" : "George Stagas <gstagas@gmail.com> (http://stagas.com/)"
 , "repository" :
   { "type" : "git"
   , "url" : "https://github.com/stagas/nodie.git"
   }
-, "main": "./nodie"
 , "bin" : { "nodie" : "./nodie.js" }
 , "engines" : { "node" : "*" }
 }

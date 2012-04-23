@@ -1,16 +1,11 @@
-nodie
-=====
+# nodie
 
 nodie restarts an application if it dies
 
+## Installation
 
-Installation
-------------
-
-    npm install nodie
-
+`npm install nodie -g`
     
-Usage
------
+## Usage
 
-    nodie <program> [param] [...]
+`nodie <program> [param] [...]`
