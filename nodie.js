@@ -17,6 +17,7 @@ var appString = app.join(' ')
 process.title = 'nodie ' + appString
 
 ;(function run () {
+  var child
   console.error('starting', appString)
   try {
     child = spawn(app[0], app.slice(1))   
